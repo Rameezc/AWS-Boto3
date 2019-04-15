@@ -6,6 +6,6 @@ print
 
 count = 1
 for bucket in s3.buckets.all():
-  count =+ 1
+  count += 1
   print count, (bucket.name)
   
