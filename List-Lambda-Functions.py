@@ -3,20 +3,30 @@
 
 import boto3
 
-desc_regions = ec2.describe_regions()
+def list_myfunctions():
+    ec2 = boto3.client('ec2', region_name='us-east-1')
+    regions = ec2.describe_regions()
+    for item in regions['Regions']:
+        print 'Region ---> : %s ' % item['RegionName']
+        region_name = item['RegionName']
+        # Ignore the following Region due to Permissions in my Account.
+        if region_name != "ap-northeast-3":
+            # Setting Region Name List of Region Names
+            client = boto3.client('lambda', region_name=region_name)
+            response = client.list_functions()
+            functions = response['Functions']
+            # If Function is True, Perform the following actions
+            if functions:
+                count = 0
+                print "Please see the functions in the Region below : %s " % region_name
+                print "====================================================================="
+                for item in functions:
+                    count += 1
+                    print count, item['FunctionName']
+                print '\n'
+            else:
+                print "This Region Has no Functions!"
+                print "==============================="
+                print '\n'
 
-for regions in desc_regions['Regions']:
-	region_name = regions['RegionName']
-	if region_name != "ap-northeast-3":
-		# You don't need to save to a list and then loop through a list of region names if you can do it here one time!
-		client = boto3.client('lambda', region_name=region_name) 
-		response = client.list_functions()
-		functions = response['Functions']		
-		# Because you may not have functions in every region - If True:
-		if functions:  
-			count = 0
-			print 'The Region: %s ' % region_name
-			for item in functions:
-				count = count + 1
-				print count, item['FunctionName']
-			print "\n"
+list_myfunctions()
