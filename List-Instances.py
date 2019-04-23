@@ -1,35 +1,32 @@
 import boto3
-# The Purpose of this code is to Describe all Regions and Instances Running in each Region
 
-# Define the Client - EC2
+print 'Here we will check the various AWS Regions for Instances and Print the Region along with Instance ID'
 
-ec2 = boto3.client('ec2', region_name='us-east-1')
+def region_names():
+    region_list = []
+    ec2 = boto3.client('ec2', region_name='us-east-1')
+    region = ec2.describe_regions()
+    # Placing Regions in a List
+    for item in region['Regions']:
+        region_list.append(item['RegionName'])
+        # Redefine Region and Region Name as List of Names
+    for name in region_list:
+        region = boto3.client('ec2', region_name=name)
+        # Checking if there is an Instance
+        if region.describe_instances()['Reservations']:
+            desc = region.describe_instances()['Reservations'][0]['Instances'][0]
+            # Print Instance ID, Private IP and Private DNS Name
+            Id = desc['InstanceId']
+            Ip = desc['PrivateIpAddress']
+            dns = desc['PrivateDnsName']
+            print 'Region: %s ' % name
+            print '=================='
+            print 'Instance Details:'
+            print '=================='
+            print Id
+            print Ip
+            print dns
+            print '==================='
+            print 
 
-# Define the Empty Region List - To be used later.
-
-regionlist = []
-regions = ec2.describe_regions()
-
-# Get the Region Names and Store in the regionlist[]
-
-for item in regions['Regions']:
-    regionlist.append(item['RegionName'])
-
-# For each Region in Region-List, perform region.describe_instances(), Filtering for Instance ID 
-
-for name in regionlist:
-    region = boto3.client('ec2', region_name=name)
-    if region.describe_instances()['Reservations']:
-        desc = region.describe_instances()['Reservations'][0]['Instances'][0]
-        Id = desc['InstanceId']
-        Ip = desc['PrivateIpAddress']
-        dns = desc['PrivateDnsName']
-        print 'Region: %s ' % name
-        print '=================='
-        print 'Instance Details:'
-        print '=================='
-        print Id
-        print Ip
-        print dns
-        print '==================='
-        print
+region_names()
