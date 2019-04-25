@@ -1,3 +1,6 @@
+# Here we will be using Boto to List AWS regions and Loop through each Region to check for AutoScaling Groups!
+
+
 print 'Listing the Autoscaling Groups in each Region as well as the Launch Configuration'
 import boto3
 
@@ -20,9 +23,15 @@ def list_groups():
             groups = desc['AutoScalingGroupName']
             count = count + 1
             launch = desc['LaunchConfigurationName']
+            minsize = desc['MinSize']
+            maxsize = desc['MaxSize']
+            desired = desc['DesiredCapacity']
             print "Number of Autoscaling Groups in the Region: %s " % count
             print "AutoScalingGroups: %s" % groups
             print "Launch Configuration: %s" % launch
+            print "Min Group Size: %s" % minsize
+            print "Max Group Size: %s" % maxsize
+            print "Desire Capacity: %s" % desired            
             print
             print "============================================================="
             print
@@ -33,3 +42,6 @@ def list_groups():
             print
 
 list_groups()
+
+        
+         
