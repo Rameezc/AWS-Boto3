@@ -1,6 +1,5 @@
 # Here we will be using Boto to List AWS regions and Loop through each Region to check for AutoScaling Groups!
 
-
 print 'Listing the Autoscaling Groups in each Region as well as the Launch Configuration'
 import boto3
 
@@ -31,15 +30,28 @@ def list_groups():
             print "Launch Configuration: %s" % launch
             print "Min Group Size: %s" % minsize
             print "Max Group Size: %s" % maxsize
-            print "Desire Capacity: %s" % desired            
-            print
+            print "Desire Capacity: %s" % desired
             print "============================================================="
             print
+            change_cap = raw_input("Would you like to change Desired Capacity?").lower()
+            if change_cap == 'y' or change_cap == 'yes':
+                group_name = raw_input('Please enter the Autoscaling Group Name: ')
+                desired_cap = int(raw_input('Please enter the Desired Capacity: '))
+                if desired_cap < minsize:
+                    print "Please note, Desired cannot be less than Min"
+            elif change_cap != 'y' or change_cap != 'yes':
+                continue
             # Debugging ec2.describe_auto_scaling_groups() Output
             #print desc
+            mynewdes = ec2.set_desired_capacity(
+                AutoScalingGroupName=group_name,
+                DesiredCapacity=desired_cap,
+                HonorCooldown=False
+            )
         else:
             print 'No Auto Scaling Groups in this Region'
             print
+
 
 list_groups()
 
