@@ -1,6 +1,6 @@
 import boto3
 
-print 'Here we will check the various AWS Regions for Instances and Print the Region along with Instance ID and State'
+print('Here we will check the various AWS Regions for Instances and Print the Region along with Instance ID and State')
 
 def region_names():
     region_list = []
@@ -20,15 +20,16 @@ def region_names():
             Ip = desc['PrivateIpAddress']
             dns = desc['PrivateDnsName']
             state = desc['State']['Name']
-            print 'Region: %s ' % name
-            print '=================='
-            print 'Instance Details:'
-            print '=================='
-            print 'Instance ID: %s' % Id
-            print 'Instance State: %s' % state
-            print 'Instance Private IP: %s' % Ip
-            print 'Instance Private DNS: %s' % dns
-            print '==================='
-            print
+            print ('Region: %s ' % name)
+            print ('==================')
+            print ('Instance Details:')
+            print ('==================')
+            print ('Instance ID: %s' % Id)
+            print ('Instance State: %s' % state)
+            print ('Instance Private IP: %s' % Ip)
+            print ('Instance Private DNS: %s' % dns)
+            print ('===================')
+            print ()
 
 region_names()
+
